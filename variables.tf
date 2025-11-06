@@ -17,17 +17,16 @@ variable "azs" {
   default = ["ap-northeast-2a", "ap-northeast-2c"]  # 사용할 가용 영역
 }
 
-variable "private_subnets" {
-  default = ["10.0.1.0/24", "10.0.2.0/24"]  # 프라이빗 서브넷 CIDR
-}
-
 variable "public_subnets" {
-  default = ["10.0.4.0/24", "10.0.5.0/24"]  # 퍼블릭 서브넷 CIDR
+  default = ["10.0.1.0/24", "10.0.2.0/24"]  # 퍼블릭 서브넷 CIDR
 }
 
+variable "private_subnets" {
+  default = ["10.0.3.0/24", "10.0.4.0/24"]  # 프라이빗 서브넷 CIDR
+}
 
 variable "cluster_version" {
-  default = "1.30"    # EKS 클러스터 버전
+  default = "1.32"    # EKS 클러스터 버전
 }
 
 variable "namespace" {
@@ -46,11 +45,11 @@ variable "node_groups" {
   }))
   default = {
     eks_node_gitops = {
-      name           = "eks_node_gitops"
+      name           = "eks_node_gitops00"  # nodegroup 이름 
       instance_types = ["t3.medium"]
       min_size       = 1
       max_size       = 3
-      desired_size   = 2
+      desired_size   = 1
       disk_size      = 20
     }
   }
@@ -79,5 +78,5 @@ variable "aws_auth_users" {
 variable "bastion_key_name" {
   description = "The key name of the Key Pair to use for the bastion instance"
   type        = string
-  default     = "<로그인키_이름>"
+  default     = "<로그인키_이름>"  # bastion login key name
 }
