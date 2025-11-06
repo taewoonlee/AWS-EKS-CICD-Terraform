@@ -68,7 +68,7 @@ resource "aws_iam_role" "bastion" {
   })
 }
 
-# ✅ 오사카 리전 호환용 Custom Policy (EKS + ECR)
+# 로컬(예:오사카) 리전 호환용 Custom Policy (EKS + ECR)
 resource "aws_iam_role_policy" "bastion_custom_eks_ecr" {
   name = "${var.cluster_name}-bastion-custom-policy"
   role = aws_iam_role.bastion.id
