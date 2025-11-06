@@ -1,3 +1,6 @@
+##############################################
+# EKS Cluster Module
+##############################################
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
@@ -8,25 +11,41 @@ module "eks" {
   vpc_id     = var.vpc_id
   subnet_ids = var.private_subnets
 
+  # EKS API endpoint 공개
   cluster_endpoint_public_access = true
 
+  # 기본 노드그룹 설정
   eks_managed_node_group_defaults = {
     ami_type       = "AL2_x86_64"
     instance_types = ["t3.medium"]
   }
 
+  # 노드 그룹 정의
   eks_managed_node_groups = var.node_groups
 
-  # aws-auth configmap
+##############################################
+# aws-auth ConfigMap 관리 설정
+##############################################
   manage_aws_auth_configmap = true
+
+  # 사용자 매핑 (필요 시)
   aws_auth_users = var.aws_auth_users
-  aws_auth_roles = var.aws_auth_roles
+
+  # Bastion Role 자동 등록
+  aws_auth_roles = concat(
+    var.aws_auth_roles,
+    [
+      {
+        rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.cluster_name}-bastion-role"
+        username = "bastion"
+        groups   = ["system:masters"]
+      }
+    ]
+  )
 }
 
-# 주요 설정 설명:
-# 1. cluster_name, cluster_version: EKS 클러스터의 이름과 Kubernetes 버전을 설정합니다.
-# 2. vpc_id, subnet_ids: 클러스터가 배포될 VPC와 서브넷을 지정합니다.
-# 3. cluster_endpoint_public_access: 클러스터 API 서버에 대한 공개 접근을 허용합니다.
-# 4. eks_managed_node_group_defaults: 노드 그룹의 기본 설정을 정의합니다.
-# 5. eks_managed_node_groups: 사용자 정의 노드 그룹 설정을 적용합니다.
-# 6. manage_aws_auth_configmap, aws_auth_users, aws_auth_roles: AWS IAM 사용자/역할과 Kubernetes RBAC 시스템을 연결합니다.
+##############################################
+# 현재 계정 정보 (동적 account_id)
+##############################################
+data "aws_caller_identity" "current" {}
+
