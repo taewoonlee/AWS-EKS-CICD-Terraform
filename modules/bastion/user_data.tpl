@@ -14,11 +14,13 @@ sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/
 sudo chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 
+# aws 프로파일 설정. 리전명 수정
 echo "Configuring AWS CLI"
 mkdir -p /home/ubuntu/.aws
 echo "[default]" > /home/ubuntu/.aws/config
 echo "region = ap-northeast-2" >> /home/ubuntu/.aws/config
 
+# 쿠버네티스 토큰 가져오기. 클러스터명, 리전명 수정
 echo "Configuring kubeconfig"
 aws eks get-token --cluster-name <Cluster_이름> --region ap-northeast-2
 aws eks update-kubeconfig --name <Cluster_이름> --region ap-northeast-2
@@ -34,6 +36,8 @@ echo "Testing kubectl"
 kubectl version --client
 kubectl get nodes
 
+# argo admin 패스워드 읽기
+echo 
 echo "Get password for argocd"
 kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d
 
