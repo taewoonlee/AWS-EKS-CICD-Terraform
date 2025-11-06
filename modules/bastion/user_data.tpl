@@ -1,5 +1,6 @@
 #!/bin/bash 
 # user_data.tpl
+
 # 시스템 업데이트 및 필요한 패키지 설치
 sudo apt-get update && apt-get upgrade -y
 sudo apt-get install -y unzip curl wget jq
@@ -19,6 +20,9 @@ echo "Configuring AWS CLI"
 mkdir -p /home/ubuntu/.aws
 echo "[default]" > /home/ubuntu/.aws/config
 echo "region = ap-northeast-2" >> /home/ubuntu/.aws/config
+
+# aws sts get-caller-identity
+# aws eks list-clusters
 
 # 쿠버네티스 토큰 가져오기. 클러스터명, 리전명 수정
 echo "Configuring kubeconfig"
