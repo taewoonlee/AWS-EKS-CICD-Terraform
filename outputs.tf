@@ -10,9 +10,14 @@ output "cluster_security_group_id" {
   value       = module.eks.cluster_security_group_id
 }
 
-
 # ECR 저장소 URL 출력
 output "ecr_repository_url" {
   description = "The URL of the ECR repository"
   value       = module.ecr.repository_url
+}
+
+# Bastion PIP 출력
+output "bastion_ssh_command" {
+  description = "SSH command to connect (replace KEY_PATH with your pem file)"
+  value       = "ssh -i <KEY_PATH> ubuntu@${module.bastion.bastion_public_ip}"
 }
