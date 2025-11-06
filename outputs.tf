@@ -19,5 +19,6 @@ output "ecr_repository_url" {
 # Bastion PIP 출력
 output "bastion_ssh_command" {
   description = "SSH command to connect (replace KEY_PATH with your pem file)"
-  value       = "ssh -i <KEY_PATH> ubuntu@${module.bastion.bastion_public_ip}"
+  value       = "ssh -i ${var.bastion_key_name}.pem ubuntu@${module.bastion.bastion_public_ip}"
 }
+
