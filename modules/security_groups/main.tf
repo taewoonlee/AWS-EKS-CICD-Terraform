@@ -63,3 +63,15 @@ resource "aws_security_group_rule" "cluster_ingress_node_https" {
 }
 # 이 규칙은 워커 노드에서 실행되는 파드가 클러스터 API 서버와 통신할 수 있도록 합니다.
 # 워커 노드의 보안 그룹에서 클러스터 API 서버의 보안 그룹으로 HTTPS 트래픽을 허용합니다.
+
+resource "aws_security_group_rule" "nodeport_ingress" {
+  description       = "Allow external access to NodePort services"
+  type              = "ingress"
+  from_port         = 30000
+  to_port           = 32767
+  protocol          = "tcp"
+  security_group_id = aws_security_group.worker_group.id
+
+  # 외부 전체에서 접근 허용 (필요 시 제한 가능)
+  cidr_blocks       = ["0.0.0.0/0"]
+}
