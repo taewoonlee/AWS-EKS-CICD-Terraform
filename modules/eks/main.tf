@@ -49,3 +49,26 @@ module "eks" {
 ##############################################
 data "aws_caller_identity" "current" {}
 
+
+##############################################
+# Metrics Server 설치 (HPA 사용 위함)
+##############################################
+resource "helm_release" "metrics_server" {
+  name       = "metrics-server"
+  namespace  = "kube-system"
+
+  repository = "https://kubernetes-sigs.github.io/metrics-server/"
+  chart      = "metrics-server"
+  version    = "3.12.0"
+
+  # AWS 환경에서 kubelet TLS 검증이 종종 실패하므로 인자 필요
+  set {
+    name  = "args"
+    value = "{--kubelet-insecure-tls}"
+  }
+
+  depends_on = [
+    module.eks
+  ]
+}
+
