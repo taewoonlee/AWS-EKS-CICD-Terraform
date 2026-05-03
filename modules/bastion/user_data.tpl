@@ -26,8 +26,8 @@ echo "region = ap-northeast-2" >> /home/ubuntu/.aws/config
 
 # 쿠버네티스 토큰 가져오기. 클러스터명, 리전명 수정
 echo "Configuring kubeconfig"
-aws eks get-token --cluster-name <Cluster_이름> --region ap-northeast-2
-aws eks update-kubeconfig --name <Cluster_이름> --region ap-northeast-2
+aws eks get-token --cluster-name bluerain-gitops --region ap-northeast-2
+aws eks update-kubeconfig --name bluerain-gitops --region ap-northeast-2
 
 echo "Setting permissions"
 chown -R ubuntu:ubuntu /home/ubuntu/.kube /home/ubuntu/.aws

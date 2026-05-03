@@ -6,7 +6,7 @@ variable "region" {
 }
 
 variable "cluster_name" {
-  default = "<Cluster_이름>"  # EKS 클러스터 이름
+  default = "bluerain-gitops"  # EKS 클러스터 이름
 }
 
 variable "vpc_cidr" {
@@ -45,11 +45,11 @@ variable "node_groups" {
   }))
   default = {
     eks_node_gitops = {
-      name           = "eks_node_gitops00"  # nodegroup 이름 
+      name           = "eks_node_gitops"  # nodegroup 이름 
       instance_types = ["t3.medium"]
       min_size       = 1
       max_size       = 3
-      desired_size   = 1
+      desired_size   = 2
       disk_size      = 20
     }
   }
@@ -78,5 +78,5 @@ variable "aws_auth_users" {
 variable "bastion_key_name" {
   description = "The key name of the Key Pair to use for the bastion instance"
   type        = string
-  default     = "<로그인키_이름>"  # bastion login key name
+  default     = "bluerain-gitops-key"  # bastion login key name
 }
