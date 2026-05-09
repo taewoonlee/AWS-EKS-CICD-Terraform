@@ -179,3 +179,40 @@ module "argocd" {
   source     = "./modules/argocd"
   depends_on = [module.eks]
 }
+
+# Sora-Website 추가 소스코드
+resource "kubernetes_manifest" "sora_website_argocd_app" {
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+
+    metadata = {
+      name      = "sora-website"
+      namespace = "argocd"
+    }
+
+    spec = {
+      project = "default"
+
+      source = {
+        repoURL        = "https://github.com/taewoonlee/Sora-Website.git"
+        targetRevision = "main"
+        path           = "k8s"
+      }
+
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "default"
+      }
+
+      syncPolicy = {
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
+      }
+    }
+  }
+
+  depends_on = [module.argocd]
+}
